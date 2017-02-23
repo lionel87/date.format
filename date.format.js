@@ -72,6 +72,12 @@
  *  r   RFC 2822 formatted date                                         Thu, 21 Dec 2000 16:01:07 +0200
  *  U   Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT)      1487778422
  *
+ *  Non-PHP-standard formatters
+ *  V   Week number without leading zero
+ *  k   Suffix (st nd rd th) for week numbers
+ *  Q   Quarter of the year
+ *  q   Suffix (st nd rd th) for quarter of the year
+ *
  */
 Date.prototype.format = function(format, lang) {
     var date = this,
@@ -171,7 +177,21 @@ Date.format = {
         // Full Date/Time
         c: function() { return this.format('Y-m-d\\TH:i:sP'); },
         r: function() { return this.toString(); },
-        U: function() { return this.getTime() / 1000; }
+        U: function() { return this.getTime() / 1000; },
+
+        // *** non-standard formatters below ***
+
+        // Week number without leading zero
+        V: function() { var target = new Date(this.valueOf()), dayNr = (this.getDay() + 6) % 7; target.setDate(target.getDate() - dayNr + 3); var firstThursday = target.valueOf(); target.setMonth(0, 1); if (target.getDay() !== 4) { target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7); } return 1 + Math.ceil((firstThursday - target) / 604800000); },
+
+        // Suffix (st nd rd th) for week numbers
+        k: function() { var ords = Date.format.translation[arguments[0]].ordinals, wk = Date.format.formatters.V.apply(this, arguments); return (wk % 10 === 1 && wk !== 11 ? ords[0] : (wk % 10 === 2 && wk !== 12 ? ords[1] : (wk % 10 === 3 && wk !== 13 ? ords[2] : ords[3]))); },
+
+        // Quarter of the year
+        Q: function() { return Math.floor(this.getMonth() / 3) + 1; },
+
+        // Suffix (st nd rd th) for quarter of the year
+        q: function() { var ords = Date.format.translation[arguments[0]].ordinals, qu = Date.format.formatters.Q.apply(this, arguments); return (qu % 10 === 1 && qu !== 11 ? ords[0] : (qu % 10 === 2 && qu !== 12 ? ords[1] : (qu % 10 === 3 && qu !== 13 ? ords[2] : ords[3]))); }
     }
 };
 
