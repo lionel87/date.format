@@ -184,7 +184,7 @@ Will output "Dec 16th, 2013" and "Dec 16th, 2013 is here!". Here are the format 
       <th colspan="3">Timezone</th>
     </tr>
     <tr>
-      <td>e (unsuported)</td>
+      <td>e</td>
       <td>Timezone identifier</td>
       <td>UTC, GMT, Atlantic/Azorest</td>
     </tr>
@@ -239,4 +239,3 @@ Will output "Dec 16th, 2013" and "Dec 16th, 2013 is here!". Here are the format 
 * Tomas Theunissen
 * D’n Russler
 * Haravikk
- 
